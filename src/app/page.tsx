@@ -33,10 +33,12 @@ const CHART_BARS = [40, 55, 35, 70, 45, 60, 80, 50, 65, 42, 58, 72];
 const CHART_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 // ─── Nav Icons (real Figma SVGs) ─────────────────────────────────────────────
-const NavIcon = ({ src, active }: { src: string; active?: boolean }) => (
+const NavIcon = ({ src, active, color }: { src: string; active?: boolean; color?: string }) => (
   <span
-    className="w-4 h-4 shrink-0 inline-block"
+    className="shrink-0 inline-block"
     style={{
+      width: 16,
+      height: 16,
       WebkitMaskImage: `url(${src})`,
       maskImage: `url(${src})`,
       WebkitMaskSize: "contain",
@@ -45,7 +47,8 @@ const NavIcon = ({ src, active }: { src: string; active?: boolean }) => (
       maskRepeat: "no-repeat",
       WebkitMaskPosition: "center",
       maskPosition: "center",
-      backgroundColor: active ? "white" : "#535862",
+      // active → #FFFFFF | inactive → #535862 | override via color prop
+      backgroundColor: color ?? (active ? "#FFFFFF" : "#535862"),
     }}
   />
 );
@@ -130,11 +133,11 @@ function NavBar() {
                 key={item.label}
                 href={item.href}
                 className={[
-                  // padding: 4px 8px, gap: 4px, border-radius: 8px (Figma: layout_1APR1L)
-                  "flex items-center gap-1 px-2 py-1 rounded-lg text-[14px] font-body transition-colors",
+                  // Figma: padding 4px 8px | gap 4px | radius 8px | font Inter 14px
+                  "flex items-center gap-[4px] px-[8px] py-[4px] rounded-[8px] text-[14px] leading-[1.4286] font-body transition-colors whitespace-nowrap",
                   item.active
-                    ? "bg-brand-600 text-white font-medium"
-                    : "text-gray-600 hover:bg-gray-100",
+                    ? "bg-[#6E37CC] text-white font-medium"      // fill #6E37CC, text #FFFFFF, weight 500
+                    : "text-[#535862] font-normal hover:bg-gray-100", // text #535862, weight 400
                 ].join(" ")}
               >
                 <NavIcon src={item.icon} active={item.active} />
