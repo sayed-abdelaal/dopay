@@ -365,36 +365,76 @@ function PromoBanner() {
 
 function PayeesSection() {
   const cards = [
-    { label: "Ready to pay",     value: "267", bg: "bg-success-50", vColor: "text-gray-900",  lColor: "text-gray-500",  iconBg: "bg-success-100", iconColor: "text-success-600" },
-    { label: "Action needed",    value: "6",   bg: "bg-error-50",   vColor: "text-error-600", lColor: "text-error-500", iconBg: "bg-error-100",   iconColor: "text-error-600"   },
-    { label: "Pending approval", value: "8",   bg: "bg-gray-100",   vColor: "text-gray-900",  lColor: "text-gray-500",  iconBg: "bg-gray-200",    iconColor: "text-gray-500"    },
+    {
+      label: "Ready to pay",
+      value: "267",
+      bg: "bg-success-50",
+      iconBg: "bg-success-100",
+      iconColor: "#079455",
+      labelColor: "#535862",
+      valueColor: "#079455",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#079455" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      ),
+    },
+    {
+      label: "Action needed",
+      value: "6",
+      bg: "bg-error-50",
+      iconBg: "bg-error-100",
+      iconColor: "#D92D20",
+      labelColor: "#D92D20",
+      valueColor: "#D92D20",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D92D20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      ),
+    },
+    {
+      label: "Pending approval",
+      value: "8",
+      bg: "bg-gray-100",
+      iconBg: "bg-gray-200",
+      iconColor: "#535862",
+      labelColor: "#535862",
+      valueColor: "#181D27",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#535862" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      ),
+    },
   ];
   return (
     <section className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-display font-semibold text-[22px] text-gray-900">Payees</h2>
-        <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl text-[13px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <PlusIcon /> Add payees
+        <h2 className="font-display font-semibold text-[24px] text-gray-900">Payees</h2>
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-1 h-9 px-3 rounded-xl text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+            <PlusIcon /> Add payee
           </button>
-          <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl text-[13px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+          <button className="flex items-center gap-1 h-9 px-3 rounded-xl text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
             <UploadIcon /> Bulk onboard
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-5">
         {cards.map((c) => (
-          <div key={c.label} className={`${c.bg} dark:bg-gray-800 rounded-[20px] p-4 flex items-center gap-3`}>
+          <div key={c.label} className={`${c.bg} dark:bg-gray-800 rounded-[16px] p-4 flex items-center gap-3`}>
             <div className={`w-12 h-12 rounded-[28px] ${c.iconBg} flex items-center justify-center shrink-0`}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={c.iconColor}>
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
+              {c.icon}
             </div>
-            <div className="flex flex-col gap-0.5">
-              <span className={`text-[12px] font-medium font-body ${c.lColor}`}>{c.label}</span>
-              <span className={`text-[22px] font-bold font-body leading-none ${c.vColor}`}>{c.value}</span>
+            <div className="flex flex-col">
+              <span className="text-[12px] font-medium font-body leading-[1.5]" style={{ color: c.labelColor, opacity: 0.8 }}>{c.label}</span>
+              <span className="text-[20px] font-bold font-body leading-[1.5]" style={{ color: c.valueColor }}>{c.value}</span>
             </div>
           </div>
         ))}
