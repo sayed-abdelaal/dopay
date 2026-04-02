@@ -8,3 +8,5 @@ image_urls.json
 assets_nodes.json
 components_global.json
 templates.json
+public/assets/app-icon.png
+public/assets/app-icon.svg
