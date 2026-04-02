@@ -1,0 +1,10 @@
+.next/
+node_modules/
+*.json.bak
+figma_*.json
+tokens_*.json
+color_map.json
+image_urls.json
+assets_nodes.json
+components_global.json
+templates.json

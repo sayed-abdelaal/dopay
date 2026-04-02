@@ -1,0 +1,124 @@
+/* Auto-generated from Figma SDS — Silicon Design System */
+/* File: 8imXt8NooBbGQqc7pSHUXh */
+
+:root {
+  /* ─── Colors: Gray ─────────────────────────────── */
+  --color-gray-25:  #fdfdfd;
+  --color-gray-50:  #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e9eaeb;
+  --color-gray-300: #d5d7da;
+  --color-gray-400: #a4a7ae;
+  --color-gray-500: #717680;
+  --color-gray-600: #535862;
+  --color-gray-700: #414651;
+  --color-gray-800: #252b37;
+  --color-gray-900: #181d27;
+  --color-gray-950: #0a0d12;
+
+  /* ─── Colors: Brand (Purple) ───────────────────── */
+  --color-brand-50:  #e7dcf8;
+  --color-brand-100: #d5c4f2;
+  --color-brand-200: #c4aced;
+  --color-brand-300: #b394e7;
+  --color-brand-400: #a17ce0;
+  --color-brand-500: #7f4ed3;
+  --color-brand-600: #6e37cc;
+  --color-brand-700: #5c31b5;
+  --color-brand-800: #4d2e9d;
+  --color-brand-900: #3f2985;
+  --color-brand-950: #2e1f6b;
+
+  /* ─── Colors: Orange Peel ──────────────────────── */
+  --color-orange-peel-50:  #fff8e1;
+  --color-orange-peel-100: #ffeac7;
+  --color-orange-peel-200: #ffcd78;
+  --color-orange-peel-300: #ffbe50;
+  --color-orange-peel-400: #ffb028;
+  --color-orange-peel-500: #dd8c00;
+  --color-orange-peel-600: #b97602;
+  --color-orange-peel-700: #915f08;
+  --color-orange-peel-800: #6f4a09;
+  --color-orange-peel-900: #4f3406;
+  --color-orange-peel-950: #3a2604;
+
+  /* ─── Colors: Semantic ─────────────────────────── */
+  --color-error-50:   #fef3f2;
+  --color-error-100:  #fee4e2;
+  --color-error-300:  #fda29b;
+  --color-error-400:  #f97066;
+  --color-error-500:  #f04438;
+  --color-error-600:  #d92d20;
+  --color-error-700:  #b42318;
+  --color-error-900:  #7a201a;
+  --color-error-950:  #55110c;
+
+  --color-warning-50:  #fffaeb;
+  --color-warning-100: #fef0c7;
+  --color-warning-300: #fec84b;
+  --color-warning-400: #fdb022;
+  --color-warning-500: #f79009;
+  --color-warning-600: #dc6803;
+  --color-warning-900: #7a2e0e;
+  --color-warning-950: #4e1d09;
+
+  --color-success-50:  #ecfdf3;
+  --color-success-100: #dcfae6;
+  --color-success-300: #75e0a7;
+  --color-success-400: #47cd89;
+  --color-success-500: #17b26a;
+  --color-success-600: #079455;
+  --color-success-900: #074d31;
+  --color-success-950: #053321;
+
+  /* ─── Typography ───────────────────────────────── */
+  --font-display: "Euclid Circular A", sans-serif;
+  --font-body:    "Inter", sans-serif;
+
+  --text-display-2xl: 72px;
+  --text-display-xl:  60px;
+  --text-display-lg:  48px;
+  --text-display-md:  36px;
+  --text-display-sm:  30px;
+  --text-display-xs:  24px;
+  --text-xl:  20px;
+  --text-lg:  18px;
+  --text-md:  16px;
+  --text-sm:  14px;
+  --text-xs:  12px;
+
+  /* ─── Spacing ──────────────────────────────────── */
+  --spacing-0:   0px;
+  --spacing-0-5: 2px;
+  --spacing-1:   4px;
+  --spacing-1-5: 6px;
+  --spacing-2:   8px;
+  --spacing-3:   12px;
+  --spacing-4:   16px;
+  --spacing-5:   20px;
+  --spacing-6:   24px;
+  --spacing-8:   32px;
+  --spacing-10:  40px;
+  --spacing-12:  48px;
+  --spacing-16:  64px;
+  --spacing-20:  80px;
+  --spacing-24:  96px;
+  --spacing-32:  128px;
+  --spacing-40:  160px;
+  --spacing-48:  192px;
+  --spacing-56:  224px;
+  --spacing-64:  256px;
+
+  /* ─── Border Radius ────────────────────────────── */
+  --radius-none:  0px;
+  --radius-xxs:   2px;
+  --radius-xs:    4px;
+  --radius-sm:    6px;
+  --radius-md:    8px;
+  --radius-lg:    10px;
+  --radius-xl:    12px;
+  --radius-2xl:   16px;
+  --radius-3xl:   20px;
+  --radius-4xl:   24px;
+  --radius-full:  9999px;
+}
