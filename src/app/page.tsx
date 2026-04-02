@@ -4,6 +4,7 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { useTheme } from "@/components/ThemeProvider";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 type StatusVariant = "pending" | "submitted" | "completed";
@@ -112,6 +113,8 @@ const DotsIcon = () => (
 function NavDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { theme, toggle } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -122,11 +125,10 @@ function NavDropdown() {
   }, []);
 
   const items = [
-    { label: "Profile settings",  icon: "👤" },
-    { label: "Company settings",  icon: "🏢" },
-    { label: "Notifications",     icon: "🔔" },
-    { label: "Help & support",    icon: "💬" },
-    { label: "Sign out",          icon: "🚪", danger: true },
+    { label: "Profile settings", icon: "👤" },
+    { label: "Company settings", icon: "🏢" },
+    { label: "Notifications",    icon: "🔔" },
+    { label: "Help & support",   icon: "💬" },
   ];
 
   return (
@@ -135,30 +137,64 @@ function NavDropdown() {
         onClick={() => setOpen(v => !v)}
         className={[
           "w-8 h-8 flex items-center justify-center rounded-[8px] transition-colors",
-          open ? "bg-gray-200" : "hover:bg-gray-100",
+          open
+            ? "bg-gray-200 dark:bg-gray-700"
+            : "hover:bg-gray-100 dark:hover:bg-gray-800",
         ].join(" ")}
       >
         <NavIcon src="/assets/icon-more.svg" color={open ? "#181D27" : "#535862"} />
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-[200px] bg-white border border-gray-200 rounded-[12px] shadow-lg py-1 z-50">
-          {items.map((item, i) => (
+        <div className="absolute right-0 top-full mt-2 w-[220px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-[12px] shadow-lg py-1 z-50">
+
+          {/* Static menu items */}
+          {items.map((item) => (
             <button
               key={item.label}
               onClick={() => setOpen(false)}
-              className={[
-                "w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-body text-left transition-colors",
-                item.danger
-                  ? "text-error-600 hover:bg-error-50"
-                  : "text-gray-700 hover:bg-gray-50",
-                i === items.length - 2 ? "border-b border-gray-100" : "",
-              ].join(" ")}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-body text-left text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <span className="text-base leading-none">{item.icon}</span>
               {item.label}
             </button>
           ))}
+
+          {/* Divider */}
+          <div className="my-1 border-t border-gray-100 dark:border-gray-700" />
+
+          {/* Theme toggle */}
+          <button
+            onClick={() => { toggle(); setOpen(false); }}
+            className="w-full flex items-center justify-between gap-3 px-4 py-2.5 text-[13px] font-body text-left text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-base leading-none">{isDark ? "☀️" : "🌙"}</span>
+              <span>{isDark ? "Light mode" : "Dark mode"}</span>
+            </div>
+            {/* Toggle pill */}
+            <div className={[
+              "w-9 h-5 rounded-full relative transition-colors duration-200",
+              isDark ? "bg-brand-600" : "bg-gray-300",
+            ].join(" ")}>
+              <span className={[
+                "absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200",
+                isDark ? "translate-x-4" : "translate-x-0.5",
+              ].join(" ")} />
+            </div>
+          </button>
+
+          {/* Divider */}
+          <div className="my-1 border-t border-gray-100 dark:border-gray-700" />
+
+          {/* Sign out */}
+          <button
+            onClick={() => setOpen(false)}
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-body text-left text-error-600 hover:bg-error-50 dark:hover:bg-error-950 transition-colors"
+          >
+            <span className="text-base leading-none">🚪</span>
+            Sign out
+          </button>
         </div>
       )}
     </div>
@@ -169,14 +205,14 @@ function NavDropdown() {
 
 function NavBar() {
   return (
-    <div className="w-full bg-gray-50 border-b border-gray-200">
+    <div className="w-full bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
       {/* Top strip — "Hi, Hatem" + company */}
       <div className="max-w-[1440px] mx-auto px-8 flex items-center justify-between py-1">
-        <span className="text-[12px] text-gray-500 font-body">Hi, Hatem</span>
+        <span className="text-[12px] text-gray-500 dark:text-gray-400 font-body">Hi, Hatem</span>
         <div className="flex items-center gap-2 text-[12px] font-body">
-          <span className="text-gray-500">ACME Company</span>
+          <span className="text-gray-500 dark:text-gray-400">ACME Company</span>
           <span className="w-1 h-1 rounded-full bg-gray-400 inline-block" />
-          <span className="font-semibold text-gray-900">Headquarters</span>
+          <span className="font-semibold text-gray-900 dark:text-gray-100">Headquarters</span>
         </div>
       </div>
 
@@ -227,13 +263,13 @@ function NavBar() {
 
 function PageHeader() {
   return (
-    <div className="w-full bg-gray-50 border-b border-gray-200">
+    <div className="w-full bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-[1440px] mx-auto px-8 pt-6 pb-0">
         {/* 3-col row */}
         <div className="flex items-center gap-6">
           {/* Left: greeting */}
           <div className="flex-1">
-            <h1 className="font-display font-bold text-[32px] leading-tight text-gray-900">
+            <h1 className="font-display font-bold text-[32px] leading-tight text-gray-900 dark:text-white">
               Hello Jumana
             </h1>
           </div>
@@ -348,7 +384,7 @@ function PayeesSection() {
       </div>
       <div className="grid grid-cols-3 gap-4">
         {cards.map((c) => (
-          <div key={c.label} className={`${c.bg} rounded-[20px] p-4 flex items-center gap-3`}>
+          <div key={c.label} className={`${c.bg} dark:bg-gray-800 rounded-[20px] p-4 flex items-center gap-3`}>
             <div className={`w-12 h-12 rounded-[28px] ${c.iconBg} flex items-center justify-center shrink-0`}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={c.iconColor}>
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -385,8 +421,8 @@ function PaymentsSection() {
       {/* Table + Chart side by side */}
       <div className="flex gap-4">
         {/* Table */}
-        <div className="flex-1 rounded-[20px] border border-gray-200 overflow-hidden">
-          <div className="grid grid-cols-[1fr_140px_140px_160px_44px] bg-gray-50 border-b border-gray-200">
+        <div className="flex-1 rounded-[20px] border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="grid grid-cols-[1fr_140px_140px_160px_44px] bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             {["PAYMENT REF", "DATE", "TOTAL (EGP)", "STATUS", ""].map((col) => (
               <div key={col} className="px-4 py-3 text-[11px] font-semibold font-body text-gray-500 uppercase tracking-wider">
                 {col}
@@ -397,7 +433,7 @@ function PaymentsSection() {
             const s = STATUS_STYLES[row.status];
             return (
               <div key={i}>
-                <div className="grid grid-cols-[1fr_140px_140px_160px_44px] items-center hover:bg-gray-50 transition-colors">
+                <div className="grid grid-cols-[1fr_140px_140px_160px_44px] items-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                   <div className="px-4 py-3.5 text-[13px] font-body text-gray-700">{row.ref}</div>
                   <div className="px-4 py-3.5 text-[13px] font-body text-gray-600">{row.date}</div>
                   <div className="px-4 py-3.5 text-[13px] font-semibold font-body text-gray-900">{row.amount}</div>
@@ -422,11 +458,11 @@ function PaymentsSection() {
         </div>
 
         {/* Chart panel */}
-        <div className="w-[280px] shrink-0 rounded-[20px] border border-gray-200 p-5 flex flex-col gap-4">
+        <div className="w-[280px] shrink-0 rounded-[20px] border border-gray-200 dark:border-gray-700 dark:bg-gray-900 p-5 flex flex-col gap-4">
           <div>
-            <p className="text-[12px] text-gray-500 font-body">Average payments (YTD)</p>
+            <p className="text-[12px] text-gray-500 dark:text-gray-400 font-body">Average payments (YTD)</p>
             <div className="flex items-baseline gap-1 mt-1">
-              <span className="text-[24px] font-bold text-gray-900 font-body leading-none">3,000.00</span>
+              <span className="text-[24px] font-bold text-gray-900 dark:text-white font-body leading-none">3,000.00</span>
               <span className="text-[12px] text-gray-500 font-body">EGP</span>
             </div>
           </div>
@@ -464,14 +500,14 @@ function MoreFromDopay() {
       </div>
       <div className="grid grid-cols-2 gap-4">
         {/* EarlyPay card */}
-        <div className="rounded-[20px] border border-gray-200 p-5 flex flex-col gap-3">
+        <div className="rounded-[20px] border border-gray-200 dark:border-gray-700 dark:bg-gray-900 p-5 flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
-              <NavIcon src="/assets/icon-earlypay.svg" />
+            <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950 flex items-center justify-center">
+              <NavIcon src="/assets/icon-earlypay.svg" color="#6E37CC" />
             </div>
-            <span className="font-semibold text-[15px] text-gray-900 font-body">EarlyPay</span>
+            <span className="font-semibold text-[15px] text-gray-900 dark:text-white font-body">EarlyPay</span>
           </div>
-          <p className="text-[13px] text-gray-500 font-body leading-relaxed">
+          <p className="text-[13px] text-gray-500 dark:text-gray-400 font-body leading-relaxed">
             Managing Early Pay for your employees can be challenging, so don't make your team wait for the single thing they already earned.
           </p>
           <div className="flex items-center gap-2 mt-auto">
@@ -484,14 +520,14 @@ function MoreFromDopay() {
           </div>
         </div>
         {/* BridgePay card */}
-        <div className="rounded-[20px] border border-gray-200 p-5 flex flex-col gap-3">
+        <div className="rounded-[20px] border border-gray-200 dark:border-gray-700 dark:bg-gray-900 p-5 flex flex-col gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
-              <NavIcon src="/assets/icon-payments.svg" />
+            <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950 flex items-center justify-center">
+              <NavIcon src="/assets/icon-payments.svg" color="#6E37CC" />
             </div>
-            <span className="font-semibold text-[15px] text-gray-900 font-body">BridgePay</span>
+            <span className="font-semibold text-[15px] text-gray-900 dark:text-white font-body">BridgePay</span>
           </div>
-          <p className="text-[13px] text-gray-500 font-body leading-relaxed">
+          <p className="text-[13px] text-gray-500 dark:text-gray-400 font-body leading-relaxed">
             Want to make dopay payments on time? Then a short term revolving credit line with BridgePay might be the answer.
           </p>
           <div className="flex items-center gap-2 mt-auto">
@@ -511,7 +547,7 @@ function MoreFromDopay() {
 // ─── Page ────────────────────────────────────────────────────────────────────
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white font-body">
+    <div className="min-h-screen bg-white dark:bg-gray-950 font-body transition-colors duration-200">
       <NavBar />
       <PageHeader />
       <main className="w-full max-w-[1440px] mx-auto px-8 pt-6 flex flex-col gap-8">
