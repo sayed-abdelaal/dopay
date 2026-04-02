@@ -353,26 +353,33 @@ function PageHeader() {
 
 function PromoBanner() {
   return (
-    <div className="w-full rounded-[20px] flex items-center gap-5 p-5 overflow-hidden"
-      style={{ background: "linear-gradient(90deg, #6e37cc 0%, #4d2e9d 100%)" }}>
+    <div
+      className="w-full rounded-[20px] flex items-center gap-4 p-6 overflow-hidden"
+      style={{ background: "linear-gradient(90deg, #6E37CC 0%, #3F2985 100%)" }}
+    >
+      {/* 96×96px promo image */}
       <div className="w-24 h-24 shrink-0">
-        <Image src="/assets/promo-company-image.png" alt="EarlyPay" width={96} height={96} className="w-full h-full object-contain drop-shadow-lg" />
+        <Image src="/assets/promo-earlypay.png" alt="EarlyPay" width={96} height={96} className="w-full h-full object-contain drop-shadow-lg" />
       </div>
-      <div className="flex flex-col gap-2 flex-1 min-w-0">
-        <p className="font-display font-semibold text-[20px] leading-snug text-white">
+
+      {/* Title + Body */}
+      <div className="flex flex-col gap-3 flex-1 min-w-0">
+        <p className="font-display font-semibold text-[24px] leading-[32px] text-white">
           Your company is now eligible for EarlyPay
         </p>
-        <p className="text-[13px] text-white/75 font-body leading-relaxed">
+        <p className="font-body font-normal text-[16px] leading-[24px] text-white">
           It only takes a couple of minutes to activate and you will then have complete control
           over who has the ability to access their earned wages early.
         </p>
       </div>
+
+      {/* Buttons — Learn more first, then Activate now (Figma order) */}
       <div className="flex items-center gap-2 shrink-0">
-        <button className="h-9 px-4 rounded-xl border border-white text-white text-[13px] font-medium font-body hover:bg-white/10 transition-colors whitespace-nowrap">
-          Activate now
-        </button>
-        <button className="h-9 px-4 rounded-xl text-white text-[13px] font-medium font-body hover:bg-white/10 transition-colors whitespace-nowrap">
+        <button className="h-11 px-3 rounded-[12px] text-[14px] font-medium font-body text-white hover:bg-white/10 transition-colors whitespace-nowrap">
           Learn more
+        </button>
+        <button className="h-11 px-3 rounded-[12px] text-[14px] font-medium font-body text-white hover:bg-white/10 transition-colors whitespace-nowrap">
+          Activate now
         </button>
       </div>
     </div>
