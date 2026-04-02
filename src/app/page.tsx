@@ -4,23 +4,15 @@
 import Image from "next/image";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
-
 type StatusVariant = "pending" | "submitted" | "completed";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
-
 const NAV_ITEMS = [
   { label: "Home",     href: "#", active: true  },
   { label: "Payees",   href: "#", active: false },
   { label: "Payments", href: "#", active: false },
   { label: "EarlyPay", href: "#", active: false },
   { label: "Branches", href: "#", active: false },
-];
-
-const STAT_CARDS = [
-  { label: "Ready to pay",    value: "267", bg: "bg-success-50", textColor: "text-gray-600",   valueColor: "text-gray-900",   iconBg: "bg-success-100" },
-  { label: "Action needed",   value: "6",   bg: "bg-error-50",   textColor: "text-error-600",  valueColor: "text-error-600",  iconBg: "bg-error-100"   },
-  { label: "Pending approval",value: "8",   bg: "bg-gray-100",   textColor: "text-gray-600",   valueColor: "text-gray-900",   iconBg: "bg-gray-200"    },
 ];
 
 const PAYMENTS = [
@@ -32,135 +24,251 @@ const PAYMENTS = [
 ];
 
 const STATUS_STYLES: Record<StatusVariant, { bg: string; text: string; label: string }> = {
-  pending:   { bg: "bg-brand-50",   text: "text-brand-600",   label: "Pending Approval" },
-  submitted: { bg: "bg-success-100",text: "text-success-600", label: "Submitted"        },
-  completed: { bg: "bg-gray-200",   text: "text-gray-600",    label: "Completed"        },
+  pending:   { bg: "bg-brand-50",    text: "text-brand-600",   label: "Pending Approval" },
+  submitted: { bg: "bg-success-100", text: "text-success-600", label: "Submitted"        },
+  completed: { bg: "bg-gray-200",    text: "text-gray-600",    label: "Completed"        },
 };
 
-// ─── Sub-components ─────────────────────────────────────────────────────────
+const CHART_BARS = [40, 55, 35, 70, 45, 60, 80, 50, 65, 42, 58, 72];
+const CHART_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+// ─── Icons ──────────────────────────────────────────────────────────────────
+const HomeIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+    <polyline points="9 22 9 12 15 12 15 22"/>
+  </svg>
+);
+const PayeesIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+  </svg>
+);
+const PaymentsIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+    <line x1="1" y1="10" x2="23" y2="10"/>
+  </svg>
+);
+const EarlyPayIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/>
+  </svg>
+);
+const BranchIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+    <rect x="14" y="14" width="7" height="7"/>
+    <line x1="6.5" y1="10" x2="6.5" y2="14"/><line x1="6.5" y1="14" x2="17.5" y2="14"/>
+  </svg>
+);
+const WalletIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E37CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+    <path d="M16 3L4 7"/><circle cx="17" cy="13" r="1"/>
+  </svg>
+);
+const BellIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#535862" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+  </svg>
+);
+const EyeIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+);
+const BulbIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/>
+    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>
+  </svg>
+);
+const ArrowRightIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+  </svg>
+);
+const PlusIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+  </svg>
+);
+const UploadIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+  </svg>
+);
+const DownloadIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+  </svg>
+);
+const DotsIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#535862" strokeWidth="2" strokeLinecap="round">
+    <circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>
+  </svg>
+);
+
+const NAV_ICONS: Record<string, React.ReactNode> = {
+  Home: <HomeIcon />, Payees: <PayeesIcon />, Payments: <PaymentsIcon />,
+  EarlyPay: <EarlyPayIcon />, Branches: <BranchIcon />,
+};
+
+// ─── Components ─────────────────────────────────────────────────────────────
 
 function NavBar() {
   return (
-    <nav className="w-full h-[74px] bg-gray-50 border-b border-gray-200 flex items-center px-10">
-      <div className="flex items-center gap-10 w-full max-w-[1440px] mx-auto">
+    <div className="w-full bg-gray-50 border-b border-gray-200">
+      {/* Top strip */}
+      <div className="max-w-[1440px] mx-auto px-8 flex items-center justify-between py-1.5">
+        <span className="text-[12px] text-gray-500 font-body">Hi, Hatem</span>
+        <div className="flex items-center gap-2 text-[12px] text-gray-600 font-body font-medium">
+          <span>ACME Company</span>
+          <span className="w-1 h-1 rounded-full bg-gray-400 inline-block" />
+          <span className="font-semibold text-gray-900">Headquarters</span>
+        </div>
+      </div>
+
+      {/* Main nav */}
+      <div className="max-w-[1440px] mx-auto px-8 flex items-center gap-6 h-[52px]">
         {/* Logo */}
-        <Image
-          src="/assets/logo-horizontal-en.svg"
-          alt="DoPay"
-          width={112}
-          height={30}
-          priority
-          className="shrink-0"
-        />
+        <Image src="/assets/logo-primary.svg" alt="dopay" width={80} height={24} className="shrink-0" />
 
         {/* Nav items */}
         <div className="flex items-center gap-1 flex-1">
           {NAV_ITEMS.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
+            <a key={item.label} href={item.href}
               className={[
-                "px-4 py-2 rounded-lg text-[14px] font-medium font-body transition-colors",
+                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium font-body transition-colors",
                 item.active
                   ? "bg-brand-600 text-white"
                   : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
               ].join(" ")}
             >
+              {NAV_ICONS[item.label]}
               {item.label}
             </a>
           ))}
         </div>
 
-        {/* Right side: company + user */}
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="flex items-center gap-2">
-            {/* Notification dot */}
-            <div className="relative">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                <span className="w-2 h-2 rounded-full bg-[#f22000] absolute -top-0.5 -right-0.5" />
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#535862" strokeWidth="2">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-              </div>
-            </div>
+        {/* Right controls */}
+        <div className="flex items-center gap-3">
+          <div className="relative w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 cursor-pointer">
+            <BellIcon />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500" />
           </div>
-          <div className="flex items-center gap-2 pl-3 border-l border-gray-200">
-            <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 text-xs font-semibold">
-              JH
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs font-medium text-gray-900 leading-none">ACME Company</span>
-              <span className="text-xs text-gray-500 leading-none mt-0.5">Headquarters</span>
-            </div>
+          <div className="w-px h-5 bg-gray-200" />
+          <div className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 cursor-pointer">
+            <DotsIcon />
           </div>
         </div>
       </div>
-    </nav>
+    </div>
   );
 }
 
 function PageHeader() {
   return (
-    <header className="w-full bg-gray-50 border-b border-gray-200 px-10">
-      <div className="max-w-[1440px] mx-auto py-5 flex items-center justify-between">
-        <h1 className="font-display font-semibold text-[24px] leading-[1.33] text-gray-900">
-          Hello Jumana
-        </h1>
+    <div className="w-full bg-gray-50 border-b border-gray-200">
+      <div className="max-w-[1440px] mx-auto px-8 pt-6 pb-0">
+        {/* 3-col row */}
+        <div className="flex items-center gap-6">
+          {/* Left: greeting */}
+          <div className="flex-1">
+            <h1 className="font-display font-bold text-[32px] leading-tight text-gray-900">
+              Hello Jumana
+            </h1>
+          </div>
+
+          {/* Center: BridgePay credit card */}
+          <div
+            className="flex items-center gap-4 px-5 py-3 rounded-[16px] cursor-pointer hover:opacity-95 transition-opacity"
+            style={{ background: "linear-gradient(135deg, #6e37cc 0%, #3f2985 100%)", minWidth: 300 }}
+          >
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5">
+                <path d="M2 8h20M2 12h20M2 16h8"/>
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+              </svg>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-white/80 text-[11px] font-body">Apply for BridgePay credit</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-white text-[13px] font-body">up to </span>
+                <span className="text-white font-bold text-[18px] font-body">1,000,000.00</span>
+                <span className="text-white/80 text-[11px] font-body">EGP</span>
+              </div>
+            </div>
+            <div className="ml-auto w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+              <ArrowRightIcon />
+            </div>
+          </div>
+
+          {/* Right: Business account */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
+              <WalletIcon />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[12px] text-gray-500 font-body">Business account</span>
+              <div className="flex items-baseline gap-1">
+                <span className="font-bold text-[20px] text-gray-900 font-body leading-none">103,000.00</span>
+                <span className="text-[12px] text-gray-500 font-body">EGP</span>
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-[#F79009] flex items-center justify-center ml-2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="15" y="15" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/>
+                <rect x="15" y="18" width="3" height="3"/><rect x="18" y="15" width="3" height="3"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
         {/* Tabs */}
-        <div className="flex items-center gap-1 border-b border-transparent">
-          {["Overview", "Learn"].map((tab, i) => (
-            <button
-              key={tab}
-              className={[
-                "px-4 py-2 text-[14px] font-medium font-body rounded-t-lg transition-colors",
-                i === 0
-                  ? "text-brand-600 border-b-2 border-brand-600"
-                  : "text-gray-600 hover:text-gray-900",
-              ].join(" ")}
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="flex items-center gap-1 mt-4">
+          <button className="flex items-center gap-1.5 px-3 pb-3 text-[14px] font-medium font-body text-brand-600 border-b-2 border-brand-600 transition-colors">
+            <EyeIcon /> Overview
+          </button>
+          <button className="flex items-center gap-1.5 px-3 pb-3 text-[14px] font-medium font-body text-gray-500 border-b-2 border-transparent hover:text-gray-700 transition-colors">
+            <BulbIcon /> Learn
+          </button>
         </div>
       </div>
-    </header>
+    </div>
   );
 }
 
 function PromoBanner() {
   return (
-    <div
-      className="w-full rounded-[20px] flex items-center gap-4 p-6"
-      style={{ background: "linear-gradient(90deg, #6e37cc 0%, #3f2985 100%)" }}
-    >
-      {/* Company icon */}
-      <div
-        className="w-24 h-24 rounded-xl shrink-0 bg-brand-800 overflow-hidden"
-        style={{ boxShadow: "0px 0px 20px 0px rgba(255,255,255,0.2)" }}
-      >
-        <div className="w-full h-full flex items-center justify-center text-white text-2xl font-bold">
-          AC
-        </div>
+    <div className="w-full rounded-[20px] flex items-center gap-5 p-5 overflow-hidden"
+      style={{ background: "linear-gradient(90deg, #6e37cc 0%, #4d2e9d 100%)" }}>
+      <div className="w-24 h-24 shrink-0">
+        <Image src="/assets/promo-company-image.png" alt="EarlyPay" width={96} height={96} className="w-full h-full object-contain drop-shadow-lg" />
       </div>
-
-      {/* Text */}
-      <div className="flex flex-col gap-3 flex-1">
-        <p className="font-display font-semibold text-[24px] leading-[1.33] text-white">
+      <div className="flex flex-col gap-2 flex-1 min-w-0">
+        <p className="font-display font-semibold text-[20px] leading-snug text-white">
           Your company is now eligible for EarlyPay
         </p>
-        <p className="font-body text-[16px] text-white/80 leading-[1.5]">
-          It only takes a couple of minutes to activate and you will then have
-          complete control over who has the ability to access their earned wages early.
+        <p className="text-[13px] text-white/75 font-body leading-relaxed">
+          It only takes a couple of minutes to activate and you will then have complete control
+          over who has the ability to access their earned wages early.
         </p>
       </div>
-
-      {/* Buttons */}
       <div className="flex items-center gap-2 shrink-0">
-        <button className="h-10 px-4 rounded-xl border border-white text-white text-[14px] font-medium font-body hover:bg-white/10 transition-colors">
+        <button className="h-9 px-4 rounded-xl border border-white text-white text-[13px] font-medium font-body hover:bg-white/10 transition-colors whitespace-nowrap">
           Activate now
         </button>
-        <button className="h-10 px-4 rounded-xl text-white text-[14px] font-medium font-body hover:bg-white/10 transition-colors">
+        <button className="h-9 px-4 rounded-xl text-white text-[13px] font-medium font-body hover:bg-white/10 transition-colors whitespace-nowrap">
           Learn more
         </button>
       </div>
@@ -169,48 +277,37 @@ function PromoBanner() {
 }
 
 function PayeesSection() {
+  const cards = [
+    { label: "Ready to pay",     value: "267", bg: "bg-success-50", vColor: "text-gray-900",  lColor: "text-gray-500",  iconBg: "bg-success-100", iconColor: "text-success-600" },
+    { label: "Action needed",    value: "6",   bg: "bg-error-50",   vColor: "text-error-600", lColor: "text-error-500", iconBg: "bg-error-100",   iconColor: "text-error-600"   },
+    { label: "Pending approval", value: "8",   bg: "bg-gray-100",   vColor: "text-gray-900",  lColor: "text-gray-500",  iconBg: "bg-gray-200",    iconColor: "text-gray-500"    },
+  ];
   return (
     <section className="flex flex-col gap-4">
-      {/* Header row */}
       <div className="flex items-center justify-between">
-        <h2 className="font-display font-semibold text-[24px] leading-[1.33] text-gray-900">
-          Payees
-        </h2>
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1.5 h-10 px-4 rounded-xl text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            Add payee
+        <h2 className="font-display font-semibold text-[22px] text-gray-900">Payees</h2>
+        <div className="flex items-center gap-2">
+          <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl text-[13px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+            <PlusIcon /> Add payees
           </button>
-          <button className="flex items-center gap-1.5 h-10 px-4 rounded-xl text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-            Bulk onboard
+          <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl text-[13px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+            <UploadIcon /> Bulk onboard
           </button>
         </div>
       </div>
-
-      {/* Stat cards */}
-      <div className="grid grid-cols-3 gap-5">
-        {STAT_CARDS.map((card) => (
-          <div
-            key={card.label}
-            className={`${card.bg} rounded-[24px] p-4 flex items-center gap-3`}
-          >
-            <div className={`w-12 h-12 rounded-[28px] ${card.iconBg} flex items-center justify-center shrink-0`}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={card.valueColor}>
+      <div className="grid grid-cols-3 gap-4">
+        {cards.map((c) => (
+          <div key={c.label} className={`${c.bg} rounded-[20px] p-4 flex items-center gap-3`}>
+            <div className={`w-12 h-12 rounded-[28px] ${c.iconBg} flex items-center justify-center shrink-0`}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={c.iconColor}>
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                 <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
               </svg>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className={`text-[12px] font-medium font-body ${card.textColor}`}>{card.label}</span>
-              <span className={`text-[20px] font-bold font-body ${card.valueColor}`}>{card.value}</span>
+              <span className={`text-[12px] font-medium font-body ${c.lColor}`}>{c.label}</span>
+              <span className={`text-[22px] font-bold font-body leading-none ${c.vColor}`}>{c.value}</span>
             </div>
           </div>
         ))}
@@ -222,91 +319,155 @@ function PayeesSection() {
 function PaymentsSection() {
   return (
     <section className="flex flex-col gap-4">
-      {/* Header row */}
       <div className="flex items-center justify-between">
-        <h2 className="font-display font-semibold text-[24px] leading-[1.33] text-gray-900">
-          Payments
-        </h2>
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-1.5 h-10 px-4 rounded-xl text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-            </svg>
-            New payment
+        <h2 className="font-display font-semibold text-[22px] text-gray-900">Payments</h2>
+        <div className="flex items-center gap-2">
+          <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl text-[13px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+            <PlusIcon /> New payment
           </button>
-          <button className="flex items-center gap-1.5 h-10 px-4 rounded-xl text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-            Payment file upload
+          <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl text-[13px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+            <UploadIcon /> Payment file upload
           </button>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="w-full rounded-[24px] bg-white border border-gray-200 overflow-hidden">
-        {/* Table header */}
-        <div className="grid grid-cols-[1fr_180px_180px_180px_48px] bg-gray-50 border-b border-gray-200">
-          {["PAYMENT REF", "DATE", "TOTAL (EGP)", "STATUS", ""].map((col) => (
-            <div key={col} className="px-4 py-3 text-[12px] font-medium font-body text-gray-600 uppercase tracking-wide">
-              {col}
-            </div>
-          ))}
+      {/* Table + Chart side by side */}
+      <div className="flex gap-4">
+        {/* Table */}
+        <div className="flex-1 rounded-[20px] border border-gray-200 overflow-hidden">
+          <div className="grid grid-cols-[1fr_140px_140px_160px_44px] bg-gray-50 border-b border-gray-200">
+            {["PAYMENT REF", "DATE", "TOTAL (EGP)", "STATUS", ""].map((col) => (
+              <div key={col} className="px-4 py-3 text-[11px] font-semibold font-body text-gray-500 uppercase tracking-wider">
+                {col}
+              </div>
+            ))}
+          </div>
+          {PAYMENTS.map((row, i) => {
+            const s = STATUS_STYLES[row.status];
+            return (
+              <div key={i}>
+                <div className="grid grid-cols-[1fr_140px_140px_160px_44px] items-center hover:bg-gray-50 transition-colors">
+                  <div className="px-4 py-3.5 text-[13px] font-body text-gray-700">{row.ref}</div>
+                  <div className="px-4 py-3.5 text-[13px] font-body text-gray-600">{row.date}</div>
+                  <div className="px-4 py-3.5 text-[13px] font-semibold font-body text-gray-900">{row.amount}</div>
+                  <div className="px-4 py-3.5">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium font-body ${s.bg} ${s.text}`}>
+                      {s.label}
+                    </span>
+                  </div>
+                  <div className="py-3.5 flex items-center justify-center">
+                    <button className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                      <DotsIcon />
+                    </button>
+                  </div>
+                </div>
+                {i < PAYMENTS.length - 1 && <div className="h-px bg-gray-100 mx-4" />}
+              </div>
+            );
+          })}
+          <div className="px-4 py-3 border-t border-gray-100 flex justify-end">
+            <button className="text-[13px] font-medium font-body text-brand-600 hover:underline">View all</button>
+          </div>
         </div>
 
-        {/* Table rows */}
-        {PAYMENTS.map((row, i) => {
-          const s = STATUS_STYLES[row.status];
-          return (
-            <div key={i}>
-              <div className="grid grid-cols-[1fr_180px_180px_180px_48px] items-center hover:bg-gray-50 transition-colors">
-                <div className="px-4 py-4 text-[14px] font-body text-gray-700">
-                  {row.ref}
-                </div>
-                <div className="px-4 py-4 text-[14px] font-body text-gray-700">
-                  {row.date}
-                </div>
-                <div className="px-4 py-4 text-[14px] font-semibold font-body text-gray-900">
-                  {row.amount}
-                </div>
-                <div className="px-4 py-4">
-                  <span className={`inline-flex items-center px-3 py-1 rounded-full text-[12px] font-medium font-body ${s.bg} ${s.text}`}>
-                    {s.label}
-                  </span>
-                </div>
-                <div className="px-2 py-4 flex items-center justify-center">
-                  <button className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              {i < PAYMENTS.length - 1 && (
-                <div className="h-px bg-gray-100 mx-4" />
-              )}
+        {/* Chart panel */}
+        <div className="w-[280px] shrink-0 rounded-[20px] border border-gray-200 p-5 flex flex-col gap-4">
+          <div>
+            <p className="text-[12px] text-gray-500 font-body">Average payments (YTD)</p>
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className="text-[24px] font-bold text-gray-900 font-body leading-none">3,000.00</span>
+              <span className="text-[12px] text-gray-500 font-body">EGP</span>
             </div>
-          );
-        })}
+          </div>
+          {/* Bar chart */}
+          <div className="flex items-end gap-1 h-[100px]">
+            {CHART_BARS.map((h, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                <div
+                  className="w-full rounded-sm"
+                  style={{ height: `${h}%`, backgroundColor: i === 9 ? "#6e37cc" : "#e9eaeb" }}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between">
+            {["Jan","Apr","Jul","Oct"].map(m => (
+              <span key={m} className="text-[10px] text-gray-400 font-body">{m}</span>
+            ))}
+          </div>
+          <button className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl border border-gray-200 text-[12px] font-medium font-body text-gray-600 hover:bg-gray-50 transition-colors w-full">
+            <DownloadIcon /> Download statement
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function MoreFromDopay() {
+  return (
+    <section className="flex flex-col gap-4 pb-8">
+      <div>
+        <p className="text-[12px] font-medium text-gray-400 uppercase tracking-wider font-body">More from dopay</p>
+        <h2 className="font-display font-semibold text-[20px] text-gray-900 mt-1">We can support you beyond payroll</h2>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {/* EarlyPay card */}
+        <div className="rounded-[20px] border border-gray-200 p-5 flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
+              <EarlyPayIcon />
+            </div>
+            <span className="font-semibold text-[15px] text-gray-900 font-body">EarlyPay</span>
+          </div>
+          <p className="text-[13px] text-gray-500 font-body leading-relaxed">
+            Managing Early Pay for your employees can be challenging, so don't make your team wait for the single thing they already earned.
+          </p>
+          <div className="flex items-center gap-2 mt-auto">
+            <button className="h-8 px-4 rounded-lg bg-brand-600 text-white text-[12px] font-medium font-body hover:bg-brand-700 transition-colors">
+              Activate now
+            </button>
+            <button className="h-8 px-3 text-[12px] font-medium font-body text-brand-600 hover:underline">
+              Learn more
+            </button>
+          </div>
+        </div>
+        {/* BridgePay card */}
+        <div className="rounded-[20px] border border-gray-200 p-5 flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
+              <PaymentsIcon />
+            </div>
+            <span className="font-semibold text-[15px] text-gray-900 font-body">BridgePay</span>
+          </div>
+          <p className="text-[13px] text-gray-500 font-body leading-relaxed">
+            Want to make dopay payments on time? Then a short term revolving credit line with BridgePay might be the answer.
+          </p>
+          <div className="flex items-center gap-2 mt-auto">
+            <button className="h-8 px-4 rounded-lg bg-brand-600 text-white text-[12px] font-medium font-body hover:bg-brand-700 transition-colors">
+              Get started
+            </button>
+            <button className="h-8 px-3 text-[12px] font-medium font-body text-brand-600 hover:underline">
+              How it works
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
 // ─── Page ────────────────────────────────────────────────────────────────────
-
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white font-body">
       <NavBar />
       <PageHeader />
-
-      {/* Body */}
-      <main className="w-full max-w-[1440px] mx-auto px-[192px] pt-6 pb-12 flex flex-col gap-12">
+      <main className="w-full max-w-[1440px] mx-auto px-8 pt-6 flex flex-col gap-8">
         <PromoBanner />
         <PayeesSection />
         <PaymentsSection />
+        <MoreFromDopay />
       </main>
     </div>
   );
