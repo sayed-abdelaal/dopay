@@ -8,11 +8,11 @@ type StatusVariant = "pending" | "submitted" | "completed";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { label: "Home",     href: "#", active: true  },
-  { label: "Payees",   href: "#", active: false },
-  { label: "Payments", href: "#", active: false },
-  { label: "EarlyPay", href: "#", active: false },
-  { label: "Branches", href: "#", active: false },
+  { label: "Home",     href: "#", active: true,  icon: "/assets/icon-home.svg"     },
+  { label: "Payees",   href: "#", active: false, icon: "/assets/icon-payees.svg"   },
+  { label: "Payments", href: "#", active: false, icon: "/assets/icon-payments.svg" },
+  { label: "EarlyPay", href: "#", active: false, icon: "/assets/icon-earlypay.svg" },
+  { label: "Branches", href: "#", active: false, icon: "/assets/icon-branches.svg" },
 ];
 
 const PAYMENTS = [
@@ -32,38 +32,24 @@ const STATUS_STYLES: Record<StatusVariant, { bg: string; text: string; label: st
 const CHART_BARS = [40, 55, 35, 70, 45, 60, 80, 50, 65, 42, 58, 72];
 const CHART_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-// ─── Icons ──────────────────────────────────────────────────────────────────
-const HomeIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-    <polyline points="9 22 9 12 15 12 15 22"/>
-  </svg>
+// ─── Nav Icons (real Figma SVGs) ─────────────────────────────────────────────
+const NavIcon = ({ src, active }: { src: string; active?: boolean }) => (
+  <span
+    className="w-4 h-4 shrink-0 inline-block"
+    style={{
+      WebkitMaskImage: `url(${src})`,
+      maskImage: `url(${src})`,
+      WebkitMaskSize: "contain",
+      maskSize: "contain",
+      WebkitMaskRepeat: "no-repeat",
+      maskRepeat: "no-repeat",
+      WebkitMaskPosition: "center",
+      maskPosition: "center",
+      backgroundColor: active ? "white" : "#535862",
+    }}
+  />
 );
-const PayeesIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-    <circle cx="9" cy="7" r="4"/>
-    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-  </svg>
-);
-const PaymentsIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-    <line x1="1" y1="10" x2="23" y2="10"/>
-  </svg>
-);
-const EarlyPayIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/>
-  </svg>
-);
-const BranchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-    <rect x="14" y="14" width="7" height="7"/>
-    <line x1="6.5" y1="10" x2="6.5" y2="14"/><line x1="6.5" y1="14" x2="17.5" y2="14"/>
-  </svg>
-);
+// ─── Remaining inline icons ──────────────────────────────────────────────────
 const WalletIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E37CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
@@ -116,57 +102,61 @@ const DotsIcon = () => (
   </svg>
 );
 
-const NAV_ICONS: Record<string, React.ReactNode> = {
-  Home: <HomeIcon />, Payees: <PayeesIcon />, Payments: <PaymentsIcon />,
-  EarlyPay: <EarlyPayIcon />, Branches: <BranchIcon />,
-};
-
 // ─── Components ─────────────────────────────────────────────────────────────
 
 function NavBar() {
   return (
     <div className="w-full bg-gray-50 border-b border-gray-200">
-      {/* Top strip */}
-      <div className="max-w-[1440px] mx-auto px-8 flex items-center justify-between py-1.5">
+      {/* Top strip — "Hi, Hatem" + company */}
+      <div className="max-w-[1440px] mx-auto px-8 flex items-center justify-between py-1">
         <span className="text-[12px] text-gray-500 font-body">Hi, Hatem</span>
-        <div className="flex items-center gap-2 text-[12px] text-gray-600 font-body font-medium">
-          <span>ACME Company</span>
+        <div className="flex items-center gap-2 text-[12px] font-body">
+          <span className="text-gray-500">ACME Company</span>
           <span className="w-1 h-1 rounded-full bg-gray-400 inline-block" />
           <span className="font-semibold text-gray-900">Headquarters</span>
         </div>
       </div>
 
-      {/* Main nav */}
-      <div className="max-w-[1440px] mx-auto px-8 flex items-center gap-6 h-[52px]">
-        {/* Logo */}
-        <Image src="/assets/logo-primary.svg" alt="dopay" width={80} height={24} className="shrink-0" />
+      {/* Main nav — padding: 4px 32px, inner gap: 68px (Figma: layout_U9JV1V / layout_KTLZEY) */}
+      <div className="max-w-[1440px] mx-auto px-8 py-1">
+        <div className="flex items-center gap-[68px] py-1">
+          {/* Logo — 90×32px (Figma: layout_13UR6V) */}
+          <Image src="/assets/logo-primary.svg" alt="dopay" width={90} height={32} className="shrink-0" />
 
-        {/* Nav items */}
-        <div className="flex items-center gap-1 flex-1">
-          {NAV_ITEMS.map((item) => (
-            <a key={item.label} href={item.href}
-              className={[
-                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium font-body transition-colors",
-                item.active
-                  ? "bg-brand-600 text-white"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-              ].join(" ")}
-            >
-              {NAV_ICONS[item.label]}
-              {item.label}
-            </a>
-          ))}
-        </div>
-
-        {/* Right controls */}
-        <div className="flex items-center gap-3">
-          <div className="relative w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 cursor-pointer">
-            <BellIcon />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500" />
+          {/* Nav items — gap: 12px (Figma: layout_0C8FX0) */}
+          <div className="flex items-center gap-3 flex-1">
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className={[
+                  // padding: 4px 8px, gap: 4px, border-radius: 8px (Figma: layout_1APR1L)
+                  "flex items-center gap-1 px-2 py-1 rounded-lg text-[14px] font-body transition-colors",
+                  item.active
+                    ? "bg-brand-600 text-white font-medium"
+                    : "text-gray-600 hover:bg-gray-100",
+                ].join(" ")}
+              >
+                <NavIcon src={item.icon} active={item.active} />
+                {item.label}
+              </a>
+            ))}
           </div>
-          <div className="w-px h-5 bg-gray-200" />
-          <div className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 cursor-pointer">
-            <DotsIcon />
+
+          {/* Right controls — bell + divider + more (Figma: menu.Container, layout_FT5WZJ) */}
+          <div className="flex items-center gap-2 px-2">
+            {/* Bell with notification dot */}
+            <div className="relative w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 cursor-pointer">
+              <NavIcon src="/assets/icon-bell.svg" />
+              {/* notification dot — absolute, 6×6px (Figma: layout_0YDGEA) */}
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-red-600" />
+            </div>
+            {/* Divider — 1×12px (Figma: layout_ZAZOH1, fill_FUJU50 #D5D7DA) */}
+            <div className="w-px h-3 bg-gray-300" />
+            {/* More horiz */}
+            <div className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 cursor-pointer">
+              <NavIcon src="/assets/icon-more.svg" />
+            </div>
           </div>
         </div>
       </div>
