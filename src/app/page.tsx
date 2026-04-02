@@ -85,9 +85,20 @@ const ArrowRightIcon = () => (
     <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
   </svg>
 );
-const PlusIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+const UserPlusIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E37CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <line x1="19" y1="8" x2="19" y2="14"/>
+    <line x1="22" y1="11" x2="16" y2="11"/>
+  </svg>
+);
+const GroupIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E37CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
   </svg>
 );
 const UploadIcon = () => (
@@ -374,10 +385,11 @@ function PayeesSection() {
       labelColor: "#535862",
       valueColor: "#079455",
       icon: (
+        /* lot-of-cash / money bag — ready to pay */
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#079455" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          <path d="M12 2a4 4 0 0 1 4 4v1H8V6a4 4 0 0 1 4-4z"/>
+          <path d="M5 7h14l-1.5 9.5A2 2 0 0 1 15.52 18H8.48a2 2 0 0 1-1.98-1.5L5 7z"/>
+          <path d="M9.5 12.5h5"/><path d="M12 10.5v4"/>
         </svg>
       ),
     },
@@ -390,10 +402,10 @@ function PayeesSection() {
       labelColor: "#D92D20",
       valueColor: "#D92D20",
       icon: (
+        /* white-flag / alert */
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D92D20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
+          <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+          <line x1="4" y1="22" x2="4" y2="15"/>
         </svg>
       ),
     },
@@ -406,9 +418,9 @@ function PayeesSection() {
       labelColor: "#535862",
       valueColor: "#181D27",
       icon: (
+        /* hourglass — pending */
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#535862" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <polyline points="12 6 12 12 16 14"/>
+          <path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>
         </svg>
       ),
     },
@@ -419,10 +431,10 @@ function PayeesSection() {
         <h2 className="font-display font-semibold text-[24px] text-gray-900">Payees</h2>
         <div className="flex items-center gap-3">
           <button className="flex items-center gap-1 h-9 px-3 rounded-xl text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <PlusIcon /> Add payee
+            <UserPlusIcon /> Add payee
           </button>
           <button className="flex items-center gap-1 h-9 px-3 rounded-xl text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <UploadIcon /> Bulk onboard
+            <GroupIcon /> Bulk onboard
           </button>
         </div>
       </div>
