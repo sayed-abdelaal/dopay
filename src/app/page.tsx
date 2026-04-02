@@ -406,7 +406,7 @@ function MoreFromDopay() {
         <div className="rounded-[20px] border border-gray-200 p-5 flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
-              <EarlyPayIcon />
+              <NavIcon src="/assets/icon-earlypay.svg" />
             </div>
             <span className="font-semibold text-[15px] text-gray-900 font-body">EarlyPay</span>
           </div>
@@ -426,7 +426,7 @@ function MoreFromDopay() {
         <div className="rounded-[20px] border border-gray-200 p-5 flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-brand-50 flex items-center justify-center">
-              <PaymentsIcon />
+              <NavIcon src="/assets/icon-payments.svg" />
             </div>
             <span className="font-semibold text-[15px] text-gray-900 font-body">BridgePay</span>
           </div>
