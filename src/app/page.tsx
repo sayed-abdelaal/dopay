@@ -29,11 +29,11 @@ const PAYMENTS = [
 const STATUS_STYLES: Record<StatusVariant, { bg: string; text: string; label: string }> = {
   pending:   { bg: "bg-brand-50",    text: "text-brand-600",   label: "Pending Approval" },
   submitted: { bg: "bg-success-100", text: "text-success-600", label: "Submitted"        },
-  completed: { bg: "bg-gray-200",    text: "text-gray-600",    label: "Completed"        },
+  completed: { bg: "bg-gray-200",    text: "text-gray-700",    label: "Completed"        },
 };
 
-const CHART_BARS = [40, 55, 35, 70, 45, 60, 80, 50, 65, 42, 58, 72];
-const CHART_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+// Heights as % of max bar (153px), actual Figma values
+const CHART_BARS = [94.8, 58.8, 78.4, 52.3, 86.3, 35.9, 52.3, 63.4, 62.7, 100, 1.3, 1.3];
 
 // ─── Nav Icons (real Figma SVGs) ─────────────────────────────────────────────
 const NavIcon = ({ src, active, color }: { src: string; active?: boolean; color?: string }) => (
@@ -113,9 +113,22 @@ const UploadIcon = () => (
   </svg>
 );
 const DownloadIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E37CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
     <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+  </svg>
+);
+const LotOfCashIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E37CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="7" width="16" height="11" rx="1.5"/>
+    <path d="M6 7V5a1.5 1.5 0 0 1 1.5-1.5h12A1.5 1.5 0 0 1 21 5v11a1.5 1.5 0 0 1-1.5 1.5H18"/>
+    <circle cx="10" cy="12.5" r="2"/>
+  </svg>
+);
+const FileUploadIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E37CC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
   </svg>
 );
 const DotsIcon = () => (
@@ -471,85 +484,110 @@ function PayeesSection() {
 function PaymentsSection() {
   return (
     <section className="flex flex-col gap-4">
+      {/* Section head */}
       <div className="flex items-center justify-between">
-        <h2 className="font-display font-semibold text-[22px] text-gray-900">Payments</h2>
-        <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl text-[13px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <PlusIcon /> New payment
+        <h2 className="font-display font-semibold text-[24px] text-gray-900">Payments</h2>
+        <div className="flex items-center gap-3">
+          <button className="flex items-center gap-1 h-11 px-3 rounded-[12px] text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+            <LotOfCashIcon /> New payment
           </button>
-          <button className="flex items-center gap-1.5 h-9 px-3 rounded-xl text-[13px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
-            <UploadIcon /> Payment file upload
+          <button className="flex items-center gap-1 h-11 px-3 rounded-[12px] text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+            <FileUploadIcon /> Payment file upload
           </button>
         </div>
       </div>
 
-      {/* Table + Chart side by side */}
-      <div className="flex gap-4">
-        {/* Table */}
-        <div className="flex-1 rounded-[20px] border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="grid grid-cols-[1fr_140px_140px_160px_44px] bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      {/* Table + Chart — gap 24px */}
+      <div className="flex gap-6">
+        {/* Table — bg #FAFAFA, r-16, no border, py-2 */}
+        <div className="flex-1 rounded-[16px] bg-gray-50 dark:bg-gray-800 py-2 overflow-hidden">
+          {/* Header row */}
+          <div className="grid grid-cols-[1fr_117px_133px_148px_36px]">
             {["PAYMENT REF", "DATE", "TOTAL (EGP)", "STATUS", ""].map((col) => (
-              <div key={col} className="px-4 py-3 text-[11px] font-semibold font-body text-gray-500 uppercase tracking-wider">
-                {col}
+              <div key={col} className="p-2">
+                <div className="px-2 py-2 text-[12px] font-medium font-body text-gray-600">
+                  {col}
+                </div>
               </div>
             ))}
           </div>
+
+          {/* Data rows */}
           {PAYMENTS.map((row, i) => {
             const s = STATUS_STYLES[row.status];
             return (
               <div key={i}>
-                <div className="grid grid-cols-[1fr_140px_140px_160px_44px] items-center hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                  <div className="px-4 py-3.5 text-[13px] font-body text-gray-700">{row.ref}</div>
-                  <div className="px-4 py-3.5 text-[13px] font-body text-gray-600">{row.date}</div>
-                  <div className="px-4 py-3.5 text-[13px] font-semibold font-body text-gray-900">{row.amount}</div>
-                  <div className="px-4 py-3.5">
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-medium font-body ${s.bg} ${s.text}`}>
-                      {s.label}
-                    </span>
+                <div className="grid grid-cols-[1fr_117px_133px_148px_36px] items-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                  <div className="p-2"><div className="px-2 py-2 text-[14px] font-body text-gray-700">{row.ref}</div></div>
+                  <div className="p-2"><div className="px-2 py-2 text-[14px] font-body text-gray-700">{row.date}</div></div>
+                  <div className="p-2"><div className="px-2 py-2 text-[14px] font-body text-gray-700">{row.amount}</div></div>
+                  <div className="p-2">
+                    <div className="px-2 py-2">
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-[12px] font-medium font-body ${s.bg} ${s.text}`}>
+                        {s.label}
+                      </span>
+                    </div>
                   </div>
-                  <div className="py-3.5 flex items-center justify-center">
-                    <button className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors">
+                  <div className="p-2 flex items-center justify-center">
+                    <button className="w-5 h-9 rounded-[12px] flex items-center justify-center hover:bg-gray-200 transition-colors py-2">
                       <DotsIcon />
                     </button>
                   </div>
                 </div>
-                {i < PAYMENTS.length - 1 && <div className="h-px bg-gray-100 mx-4" />}
+                {/* Divider — rgba(24,24,24,0.16) */}
+                {i < PAYMENTS.length - 1 && (
+                  <div className="mx-4 h-px" style={{ backgroundColor: "rgba(24,24,24,0.16)" }} />
+                )}
               </div>
             );
           })}
-          <div className="px-4 py-3 border-t border-gray-100 flex justify-end">
-            <button className="text-[13px] font-medium font-body text-brand-600 hover:underline">View all</button>
+
+          {/* View all row */}
+          <div className="px-4 pt-2 pb-2">
+            <button className="h-11 px-3 rounded-[12px] text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors">
+              View all
+            </button>
           </div>
         </div>
 
-        {/* Chart panel */}
-        <div className="w-[280px] shrink-0 rounded-[20px] border border-gray-200 dark:border-gray-700 dark:bg-gray-900 p-5 flex flex-col gap-4">
-          <div>
-            <p className="text-[12px] text-gray-500 dark:text-gray-400 font-body">Average payments (YTD)</p>
-            <div className="flex items-baseline gap-1 mt-1">
-              <span className="text-[24px] font-bold text-gray-900 dark:text-white font-body leading-none">3,000.00</span>
-              <span className="text-[12px] text-gray-500 font-body">EGP</span>
+        {/* Chart — 408px, bg #FAFAFA, r-16, no border, p-4, gap-[66px] */}
+        <div className="w-[408px] shrink-0 rounded-[16px] bg-gray-50 dark:bg-gray-800 p-4 flex flex-col gap-[66px]">
+          {/* Top: label + amount + download button */}
+          <div className="flex items-start justify-between">
+            <div className="flex flex-col gap-0.5">
+              <p className="text-[14px] font-normal font-body text-gray-600">Average outgoings (YTD)</p>
+              <p className="text-[20px] font-bold font-body text-gray-900 leading-[30px]">3,000.00 EGP</p>
             </div>
+            <button className="flex items-center gap-1 h-11 px-3 rounded-[12px] text-[14px] font-medium font-body text-brand-600 hover:bg-brand-50 transition-colors whitespace-nowrap">
+              <DownloadIcon /> Download statement
+            </button>
           </div>
-          {/* Bar chart */}
-          <div className="flex items-end gap-1 h-[100px]">
-            {CHART_BARS.map((h, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                <div
-                  className="w-full rounded-sm"
-                  style={{ height: `${h}%`, backgroundColor: i === 9 ? "#6e37cc" : "#e9eaeb" }}
-                />
-              </div>
-            ))}
+
+          {/* Bar chart + axis label */}
+          <div className="flex flex-col gap-4">
+            {/* Bars with month numbers */}
+            <div className="flex items-end gap-[13px]">
+              {CHART_BARS.map((h, i) => {
+                const isEmpty = i >= 10;
+                return (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-2">
+                    <div
+                      className="w-full rounded-sm"
+                      style={{
+                        height: `${(h / 100) * 153}px`,
+                        background: isEmpty
+                          ? "#A4A7AE"
+                          : "linear-gradient(to top, #3F2985, #9065DA)",
+                      }}
+                    />
+                    <span className="text-[14px] font-medium font-body text-gray-500">{i + 1}</span>
+                  </div>
+                );
+              })}
+            </div>
+            {/* Axis label */}
+            <p className="text-[14px] font-medium font-body text-gray-500">Months (2025)</p>
           </div>
-          <div className="flex justify-between">
-            {["Jan","Apr","Jul","Oct"].map(m => (
-              <span key={m} className="text-[10px] text-gray-400 font-body">{m}</span>
-            ))}
-          </div>
-          <button className="flex items-center justify-center gap-1.5 h-9 px-3 rounded-xl border border-gray-200 text-[12px] font-medium font-body text-gray-600 hover:bg-gray-50 transition-colors w-full">
-            <DownloadIcon /> Download statement
-          </button>
         </div>
       </div>
     </section>
